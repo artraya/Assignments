@@ -19,7 +19,8 @@ def compareWords(guess, pickedPassword):
 
 # Create a list of 100 words that are similar enough to work well for this game.
 candidateWords = ['AETHER', 'BADGED', 'BALDER', 'BANDED', 'BANTER', 'BARBER', 'BASHER', 'BATHED', 'BATHER', 'BEAMED', 'BEANED', 'BEAVER', 'BECKET', 'BEDDER', 'BEDELL', 'BEDRID', 'BEEPER', 'BEGGAR', 'BEGGED', 'BELIES', 'BELLES', 'BENDED', 'BENDEE', 'BETTER', 'BLAMER', 'BLOWER', 'BOBBER', 'BOLDER', 'BOLTER', 'BOMBER', 'BOOKER', 'BOPPER', 'BORDER', 'BOSKER', 'BOTHER', 'BOWYER', 'BRACER', 'BUDGER', 'BUMPER', 'BUSHER', 'BUSIER', 'CEILER', 'DEADEN', 'DEAFER', 'DEARER', 'DELVER', 'DENSER', 'DEXTER', 'EVADER', 'GELDED', 'GELDER', 'HEARER', 'HEIFER', 'HERDER', 'HIDDEN', 'JESTER', 'JUDDER', 'KIDDED', 'KIDDER', 'LEANER', 'LEAPER', 'LEASER', 'LEVIED', 'LEVIER', 'LEVIES', 'LIDDED', 'MADDER', 'MEANER', 'MENDER', 'MINDER', 'NEATER', 'NEEDED', 'NESTER', 'PENNER', 'PERTER', 'PEWTER', 'PODDED', 'PONDER', 'RADDED', 'REALER', 'REAVER', 'REEDED', 'REIVER', 'RELIER', 'RENDER', 'SEARER', 'SEDGES', 'SEEDED', 'SEISER', 'SETTER', 'SIDDUR', 'TEENER', 'TEMPER', 'TENDER', 'TERMER', 'VENDER', 'WEDDER', 'WEEDED', 'WELDED', 'YONDER']
-
+exceptionListNum = ["Woah! That no. is beyond the playing field. Try again!", "Can you even count?!", "Sorry, can't hold all these numbers", "Errrrrgh, you're bad at this!", "You may want to try that again!", "You must be one of those slow learners. It's okay, try again!", "I don't think I could generate enough error messages to keep up with you!", "Hmm, did you try numbers 1 to 8", "One, two, three...four....there exists more"]
+exceptionListAlpha = ["Opps, you entered a non-numeric character. Try again!", "Remember to use a numeric character, otherwise you're hurting me!", "Errrrrrrrrrror, can you read?!", "Go on, try again!", "I'm running out of errors... try again!", "In case you didn't go to school, there exists such a thing called numbers... try again"]
 
 # Sets up game properties for initial play through and replay
 def gameProperties():
@@ -49,7 +50,7 @@ def userInputCheck():
         global userInput
         userInput = int(input("Enter your guess (1 - 8): "))-1
     except:
-        print("Opps, you entered a non-numeric character. Try again!")
+        print(random.choice(exceptionListAlpha))
         userInputCheck()
     else:
         if userInput in validRange and userInput not in guessHistory:
@@ -59,7 +60,7 @@ def userInputCheck():
                 print("Already selected this word")
                 userInputCheck()
             elif userInput not in validRange:
-                print("Woah! That no. is beyond the playing field. Try again!")
+                print(random.choice(exceptionListNum))
                 userInputCheck()
             else:
                 print("You fucked up somewhere...try again")
@@ -73,13 +74,13 @@ def replayPromptCheck():
         global replayInput
         replayInput = int(input("\nWould you like to play again?\nYes: 1 | No: 0\n"))
     except:
-        print("Opps, you entered a non-numeric character. Try again!")
+        print(random.choice(exceptionListAlpha))
         replayPromptCheck()
     else:
         if replayInput in validRange:
             return replayInput
         else:
-            print("Woah! That no. is beyond the playing field. Try again!")
+            print(random.choice(exceptionListNum))
             replayPromptCheck()
 
 
