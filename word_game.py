@@ -19,18 +19,31 @@ def compareWords(guess, pickedPassword):
 
 # Create a list of 100 words that are similar enough to work well for this game.
 candidateWords = ['AETHER', 'BADGED', 'BALDER', 'BANDED', 'BANTER', 'BARBER', 'BASHER', 'BATHED', 'BATHER', 'BEAMED', 'BEANED', 'BEAVER', 'BECKET', 'BEDDER', 'BEDELL', 'BEDRID', 'BEEPER', 'BEGGAR', 'BEGGED', 'BELIES', 'BELLES', 'BENDED', 'BENDEE', 'BETTER', 'BLAMER', 'BLOWER', 'BOBBER', 'BOLDER', 'BOLTER', 'BOMBER', 'BOOKER', 'BOPPER', 'BORDER', 'BOSKER', 'BOTHER', 'BOWYER', 'BRACER', 'BUDGER', 'BUMPER', 'BUSHER', 'BUSIER', 'CEILER', 'DEADEN', 'DEAFER', 'DEARER', 'DELVER', 'DENSER', 'DEXTER', 'EVADER', 'GELDED', 'GELDER', 'HEARER', 'HEIFER', 'HERDER', 'HIDDEN', 'JESTER', 'JUDDER', 'KIDDED', 'KIDDER', 'LEANER', 'LEAPER', 'LEASER', 'LEVIED', 'LEVIER', 'LEVIES', 'LIDDED', 'MADDER', 'MEANER', 'MENDER', 'MINDER', 'NEATER', 'NEEDED', 'NESTER', 'PENNER', 'PERTER', 'PEWTER', 'PODDED', 'PONDER', 'RADDED', 'REALER', 'REAVER', 'REEDED', 'REIVER', 'RELIER', 'RENDER', 'SEARER', 'SEDGES', 'SEEDED', 'SEISER', 'SETTER', 'SIDDUR', 'TEENER', 'TEMPER', 'TENDER', 'TERMER', 'VENDER', 'WEDDER', 'WEEDED', 'WELDED', 'YONDER']
-exceptionListNum = ["Woah! That no. is beyond the playing field. Try again!", "Can you even count?!", "Sorry, can't hold all these numbers", "Errrrrgh, you're bad at this!", "You may want to try that again!", "You must be one of those slow learners. It's okay, try again!", "I don't think I could generate enough error messages to keep up with you!", "Hmm, did you try numbers 1 to 8", "One, two, three...four....there exists more"]
+exceptionListNum = ["Woah! That no. is beyond the playing field. Try again!", "Can you even count?!", "Sorry, can't hold all these numbers", "Errrrrgh, you're bad at this!", "You may want to try that again!", "You must be one of those slow learners. It's okay, try again!", "I don't think I could generate enough error messages to keep up with you!", "Hmm, did you try numbers", "One, two, three.....I can't hold all thee"]
 exceptionListAlpha = ["Opps, you entered a non-numeric character. Try again!", "Remember to use a numeric character, otherwise you're hurting me!", "Errrrrrrrrrror, can you read?!", "Go on, try again!", "I'm running out of errors... try again!", "In case you didn't go to school, there exists such a thing called numbers... try again"]
 
 # Sets up game properties for initial play through and replay
 def gameProperties():
-    global wordList, password, guessesRemaining, Won, guessHistory
-    wordList = random.sample(candidateWords, 8)
+    global difficultyInput, wordList, password, guessesRemaining, Won, guessHistory
+    difficultyPromptCheck()
+    # userDifficulty = int(input("Select Difficulty"))
+    if difficultyInput == 0:
+        wordList = random.sample(candidateWords, 6)
+        guessesRemaining = 6
+
+    elif difficultyInput == 1:
+        wordList = random.sample(candidateWords, 8)
+        guessesRemaining = 4
+
+    else:
+        if difficultyInput == 2:
+            wordList = random.sample(candidateWords, 10)
+            guessesRemaining = 4
+
     password = random.choice(wordList)
-    guessesRemaining = 4
     Won = False
     guessHistory = []
-    return wordList, password, guessesRemaining, Won, guessHistory
+    return difficultyInput, wordList, password, guessesRemaining, Won, guessHistory
 
 
 # Loops through wordList from gameProperties and arranges with index + 1
@@ -45,10 +58,15 @@ def wordListNum(wordList):
 
 # Exception handler for userInput while playing game
 def userInputCheck():
-    validRange = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+    if difficultyInput == 1:
+        validRange = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+    elif difficultyInput == 0:
+        validRange = [0, 1, 2, 3, 4, 5, 6]
+    else:
+        validRange = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     try:
         global userInput
-        userInput = int(input("Enter your guess (1 - 8): "))-1
+        userInput = int(input("Enter your guess: "))-1
     except:
         print(random.choice(exceptionListAlpha))
         userInputCheck()
@@ -83,6 +101,20 @@ def replayPromptCheck():
             print(random.choice(exceptionListNum))
             replayPromptCheck()
 
+def difficultyPromptCheck():
+    validRange = [0, 1, 2]
+    try:
+        global difficultyInput
+        difficultyInput = int(input("\nBefore we start, select your desired difficulty!\nEasy: 1\nMedium: 2\nHard: 3\n"))-1
+    except:
+        print(random.choice(exceptionListAlpha))
+        difficultyPromptCheck()
+    else:
+        if difficultyInput in validRange:
+            return difficultyInput
+        else:
+            print(random.choice(exceptionListNum))
+            difficultyPromptCheck()
 
 # Initial welcome for players and replay
 def welcome():
@@ -93,9 +125,9 @@ def welcome():
 def gameStart():
     replay = True
     while replay == True:
-        welcome()
+        global guessesRemaining
         gameProperties()
-        guessesRemaining = 4
+        welcome()
         Won = False
         while guessesRemaining > 0 and Won == False:
             wordListNum(wordList)
